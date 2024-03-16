@@ -11,8 +11,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { AmbientLight } from "three";
 import { DirectionalLight } from "three";
 import { DirectionalLightHelper } from "three";
+import { CameraHelper } from "three";
 
 const renderer = new THREE.WebGL1Renderer();
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -26,15 +28,18 @@ const camera = new THREE.PerspectiveCamera(
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 const gui = new dat.GUI();
-const ambientLight = new AmbientLight(0x333333)
-scene.add(ambientLight)
+const ambientLight = new AmbientLight(0x333333);
+scene.add(ambientLight);
 
-const directionLight = new DirectionalLight(0xFFFFFF, 0.8)
-scene.add(directionLight)
-directionLight.position.set(-30,50,0)
+const directionLight = new DirectionalLight(0xffffff, 0.8);
+scene.add(directionLight);
+directionLight.position.set(-30, 50, 0);
+directionLight.castShadow = true;
+directionLight.shadow.camera.bottom = -12
 
-const dlHelper = new DirectionalLightHelper(directionLight,5)
-scene.add(dlHelper)
+const dlHelper = new DirectionalLightHelper(directionLight, 5);
+scene.add(dlHelper);
+
 
 camera.position.set(-10, 30, 30);
 orbit.update();
@@ -59,6 +64,7 @@ const planeMaterial = new MeshStandardMaterial({
 const plane = new Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -0.5 * Math.PI;
 scene.add(plane);
+plane.receiveShadow = true;
 
 const sphereGeometry = new SphereGeometry(4, 50, 50);
 const sphereMaterial = new MeshStandardMaterial({
@@ -67,14 +73,14 @@ const sphereMaterial = new MeshStandardMaterial({
 });
 const sphere = new Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
+sphere.castShadow = true;
 
 sphere.position.set(-10, 10, 0);
 
 const options = {
   sphereColor: "#ffea00",
   wireframe: false,
-  speed: 0.01
-
+  speed: 0.01,
 };
 
 gui.addColor(options, "sphereColor").onChange(function (e) {
@@ -84,7 +90,7 @@ gui.add(options, "wireframe").onChange(function (e) {
   sphere.material.wireframe = e;
 });
 
-gui.add(options, 'speed', 0, 0.1)
+gui.add(options, "speed", 0, 0.1);
 
 let step = 0;
 
