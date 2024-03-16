@@ -1,4 +1,9 @@
 import * as THREE from "three";
+import { Mesh } from "three";
+import { GridHelper } from "three";
+import { PlaneGeometry } from "three";
+import { BoxGeometry } from "three";
+import { MeshBasicMaterial } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 const renderer = new THREE.WebGL1Renderer();
@@ -15,15 +20,23 @@ const camera = new THREE.PerspectiveCamera(
 
 const orbit = new OrbitControls(camera,renderer.domElement);
 
-camera.position.set(0, 2, 5);
+camera.position.set(-10, 30, 30);
 orbit.update()
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-const boxGeometry = new THREE.BoxGeometry();
-const boxMaterial = new THREE.MeshBasicMaterial({ color: "green" });
-const box = new THREE.Mesh(boxGeometry, boxMaterial);
+const boxGeometry = new BoxGeometry();
+const boxMaterial = new MeshBasicMaterial({ color: "green" });
+const box = new Mesh(boxGeometry, boxMaterial);
 scene.add(box);
+
+const gridHelper = new GridHelper()
+scene.add(gridHelper)
+
+const planeGeometry = new PlaneGeometry(30,30)
+const planeMaterial = new MeshBasicMaterial({color:'white'})
+const plane = new Mesh(planeGeometry,planeMaterial)
+scene.add(plane)
 
 function animate() {
   box.rotation.x += 0.01;
