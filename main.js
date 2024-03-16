@@ -8,6 +8,7 @@ import { PlaneGeometry } from "three";
 import { BoxGeometry } from "three";
 import { MeshBasicMaterial } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { AmbientLight } from "three";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -22,6 +23,9 @@ const camera = new THREE.PerspectiveCamera(
 );
 
 const orbit = new OrbitControls(camera, renderer.domElement);
+const gui = new dat.GUI();
+const ambientLight = new AmbientLight(0x333333)
+scene.add(ambientLight)
 
 camera.position.set(-10, 30, 30);
 orbit.update();
@@ -39,7 +43,7 @@ const gridHelper = new GridHelper(30);
 scene.add(gridHelper);
 
 const planeGeometry = new PlaneGeometry(30, 30);
-const planeMaterial = new MeshBasicMaterial({
+const planeMaterial = new MeshStandardMaterial({
   color: "white",
   side: THREE.DoubleSide,
 });
@@ -48,7 +52,7 @@ plane.rotation.x = -0.5 * Math.PI;
 scene.add(plane);
 
 const sphereGeometry = new SphereGeometry(4, 50, 50);
-const sphereMaterial = new MeshBasicMaterial({
+const sphereMaterial = new MeshStandardMaterial({
   color: "blue",
   wireframe: false,
 });
@@ -57,10 +61,11 @@ scene.add(sphere);
 
 sphere.position.set(-10, 10, 0);
 
-const gui = new dat.GUI();
 const options = {
   sphereColor: "#ffea00",
   wireframe: false,
+  speed: 0.01
+
 };
 
 gui.addColor(options, "sphereColor").onChange(function (e) {
@@ -70,9 +75,16 @@ gui.add(options, "wireframe").onChange(function (e) {
   sphere.material.wireframe = e;
 });
 
+gui.add(options, 'speed', 0, 0.1)
+
+let step = 0;
+
 function animate() {
   box.rotation.x += 0.01;
   box.rotation.y = 0.01;
+
+  step += options.speed;
+  sphere.position.y = 10 * Math.abs(Math.sin(step));
   renderer.render(scene, camera);
 }
 
