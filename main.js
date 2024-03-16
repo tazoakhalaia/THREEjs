@@ -9,6 +9,8 @@ import { BoxGeometry } from "three";
 import { MeshBasicMaterial } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { AmbientLight } from "three";
+import { DirectionalLight } from "three";
+import { DirectionalLightHelper } from "three";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -26,6 +28,13 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const gui = new dat.GUI();
 const ambientLight = new AmbientLight(0x333333)
 scene.add(ambientLight)
+
+const directionLight = new DirectionalLight(0xFFFFFF, 0.8)
+scene.add(directionLight)
+directionLight.position.set(-30,50,0)
+
+const dlHelper = new DirectionalLightHelper(directionLight,5)
+scene.add(dlHelper)
 
 camera.position.set(-10, 30, 30);
 orbit.update();
