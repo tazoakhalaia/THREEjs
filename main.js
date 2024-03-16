@@ -12,4 +12,8 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 
+const axesHelper = new THREE.AxesHelper(3)
+scene.add(axesHelper)
+
+camera.position.z = 5
 renderer.render(scene, camera);
