@@ -12,6 +12,8 @@ import { AmbientLight } from "three";
 import { DirectionalLight } from "three";
 import { DirectionalLightHelper } from "three";
 import { CameraHelper } from "three";
+import { SpotLight } from "three";
+import { SpotLightHelper } from "three";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.shadowMap.enabled = true;
@@ -31,15 +33,21 @@ const gui = new dat.GUI();
 const ambientLight = new AmbientLight(0x333333);
 scene.add(ambientLight);
 
-const directionLight = new DirectionalLight(0xffffff, 0.8);
-scene.add(directionLight);
-directionLight.position.set(-30, 50, 0);
-directionLight.castShadow = true;
-directionLight.shadow.camera.bottom = -12
+// const directionLight = new DirectionalLight(0xffffff, 0.8);
+// scene.add(directionLight);
+// directionLight.position.set(-30, 50, 0);
+// directionLight.castShadow = true;
+// directionLight.shadow.camera.bottom = -12
 
-const dlHelper = new DirectionalLightHelper(directionLight, 5);
-scene.add(dlHelper);
+// const dlHelper = new DirectionalLightHelper(directionLight, 5);
+// scene.add(dlHelper);
 
+const spotLight = new SpotLight(0xffffff);
+scene.add(spotLight);
+spotLight.position.set(-100, 100, 0);
+spotLight.castShadow = true;
+const spotLightHelper = new SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
 
 camera.position.set(-10, 30, 30);
 orbit.update();
