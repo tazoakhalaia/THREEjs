@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { Mesh } from "three";
 import { GridHelper } from "three";
+import { SphereGeometry } from "three";
 import { PlaneGeometry } from "three";
 import { BoxGeometry } from "three";
 import { MeshBasicMaterial } from "three";
@@ -18,25 +19,36 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 
-const orbit = new OrbitControls(camera,renderer.domElement);
+const orbit = new OrbitControls(camera, renderer.domElement);
 
 camera.position.set(-10, 30, 30);
-orbit.update()
+orbit.update();
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
 const boxGeometry = new BoxGeometry();
-const boxMaterial = new MeshBasicMaterial({ color: "green" });
+const boxMaterial = new MeshBasicMaterial({
+  color: "green",
+});
 const box = new Mesh(boxGeometry, boxMaterial);
 scene.add(box);
 
-const gridHelper = new GridHelper()
-scene.add(gridHelper)
+const gridHelper = new GridHelper(30);
+scene.add(gridHelper);
 
-const planeGeometry = new PlaneGeometry(30,30)
-const planeMaterial = new MeshBasicMaterial({color:'white'})
-const plane = new Mesh(planeGeometry,planeMaterial)
-scene.add(plane)
+const planeGeometry = new PlaneGeometry(30, 30);
+const planeMaterial = new MeshBasicMaterial({
+  color: "white",
+  side: THREE.DoubleSide,
+});
+const plane = new Mesh(planeGeometry, planeMaterial);
+plane.rotation.x = -0.5 * Math.PI;
+scene.add(plane);
+
+const sphereGeometry = new SphereGeometry(4);
+const sphereMaterial = new MeshBasicMaterial({ color: "blue" });
+const sphere = new Mesh(sphereGeometry, sphereMaterial);
+scene.add(sphere);
 
 function animate() {
   box.rotation.x += 0.01;
