@@ -14,6 +14,11 @@ import { DirectionalLightHelper } from "three";
 import { CameraHelper } from "three";
 import { SpotLight } from "three";
 import { SpotLightHelper } from "three";
+import { Fog } from "three";
+import nebula from './img/nebula.png'
+import stars from './img/stars.png'
+import { TextureLoader } from "three";
+import { CubeTextureLoader } from "three";
 
 const renderer = new THREE.WebGL1Renderer();
 renderer.shadowMap.enabled = true;
@@ -30,24 +35,28 @@ const camera = new THREE.PerspectiveCamera(
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 const gui = new dat.GUI();
+const textureLoader = new TextureLoader()
+
 const ambientLight = new AmbientLight(0x333333);
 scene.add(ambientLight);
 
-// const directionLight = new DirectionalLight(0xffffff, 0.8);
-// scene.add(directionLight);
-// directionLight.position.set(-30, 50, 0);
-// directionLight.castShadow = true;
-// directionLight.shadow.camera.bottom = -12
+const directionLight = new DirectionalLight(0xffffff, 0.8);
+scene.add(directionLight);
+directionLight.position.set(-30, 50, 0);
+directionLight.castShadow = true;
+directionLight.shadow.camera.bottom = -12
 
-// const dlHelper = new DirectionalLightHelper(directionLight, 5);
-// scene.add(dlHelper);
+const dlHelper = new DirectionalLightHelper(directionLight, 5);
+scene.add(dlHelper);
 
-const spotLight = new SpotLight(0xffffff);
-scene.add(spotLight);
-spotLight.position.set(-100, 100, 0);
-spotLight.castShadow = true;
-const spotLightHelper = new SpotLightHelper(spotLight);
-scene.add(spotLightHelper);
+scene.fog = new Fog(0xFFFFFF, 0, 200)
+
+// const spotLight = new SpotLight(0xffffff);
+// scene.add(spotLight);
+// spotLight.position.set(-100, 100, 0);
+// spotLight.castShadow = true;
+// const spotLightHelper = new SpotLightHelper(spotLight);
+// scene.add(spotLightHelper);
 
 camera.position.set(-10, 30, 30);
 orbit.update();
@@ -76,7 +85,8 @@ plane.receiveShadow = true;
 
 const sphereGeometry = new SphereGeometry(4, 50, 50);
 const sphereMaterial = new MeshStandardMaterial({
-  color: "blue",
+  // color: "blue",
+  map: textureLoader.load(nebula),
   wireframe: false,
 });
 const sphere = new Mesh(sphereGeometry, sphereMaterial);
@@ -101,6 +111,9 @@ gui.add(options, "wireframe").onChange(function (e) {
 gui.add(options, "speed", 0, 0.1);
 
 let step = 0;
+
+// renderer.setClearColor('orange')
+// scene.background = textureLoader.load(stars)
 
 function animate() {
   box.rotation.x += 0.01;
